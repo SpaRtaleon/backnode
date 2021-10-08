@@ -1,18 +1,20 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+let createError = require('http-errors');
+let express = require('express');
+let path = require('path');
+let cookieParser = require('cookie-parser');
+let logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+let indexRouter = require('./routes/index');
+let usersRouter = require('./routes/users');
+let products=require('./routes/products')
 
-var app = express();
-
+const app = express();
+const cors=require('cors');
+app.use(cors());
+let dbconnection=require("./dbconnenction")
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -21,6 +23,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/products',products)
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -37,5 +41,12 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+// async function query(sql, params) {
+//   const connection = await mysql.createConnection(dbconnection);
+//   const [results, ] = await connection.execute(sql, params);
+
+//   return results;
+// }
 
 module.exports = app;
