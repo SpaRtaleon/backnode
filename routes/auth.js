@@ -1,7 +1,7 @@
 
 const bodyParser=require('body-parser')
 const cookieParser = require('cookie-parser');
-
+const user=require('../model/user')
 var express = require('express');
 var router = express.Router();
 let connection=require('../config/dbconnenction');
@@ -21,19 +21,65 @@ router.post('/login', function(req, res, loginRoute) {
   loginRoute();
 });
 
-router.post('/register',function(req, res, next){
-  console.log(req.body)
-username=req.body.Username;
-password=req.body.Password;
-email=req.body.Email;
-type=req.body.Role;
-sql="INSERT INTO useraccounts(username,password,email,usertype) VALUES (?,?,?,?)";
-connection.query(sql,[username,password,email,type],function(err,rows,result){
-    if(!err)   
-    console.log("SUCCESSFULLY ADDED USER : ",username ,)  
-    else  
-        console.log("error:",err);
-})
+
+
+router.post('/register',async(req, res)=>{
+
+  try{
+    const {firstName,lastName,email,password}=req.body;
+    if(!(firstName && lastName && email && password)){
+      res.status(400).send("All inputs are required!")
+    }
+
+    const oldUser=await user.findOne({email});
+
+    if ( oldUser){
+      return res.status(409).send("User Already Exist..Please Login")
+    }
+
+    encrptedPassword = await bcrypt.hash(password,10);
+
+    const user =await user.creat({
+      firstName,
+      lastName,
+      email:email.toLowerCase(),
+      password:encrptedPassword,
+    });
+
+    const token = jwt.sign(
+      {
+        user_id:user._id,email 
+      },
+      process.env.TOKEN_KEY,{
+        expiresIn:"2h",
+      }
+    );
+    user.token = token;
+     res.status(201).json(user);
+  }//try
+  catch(err){
+    console.log(err);
+  }
+});
+
+
+
+
+
+
+// router.post('/register',function(req, res, next){
+//   console.log(req.body)
+// username=req.body.Username;
+// password=req.body.Password;                          //works
+// email=req.body.Email;
+// type=req.body.Role;
+// sql="INSERT INTO useraccounts(username,password,email,usertype) VALUES (?,?,?,?)";
+// connection.query(sql,[username,password,email,type],function(err,rows,result){
+//     if(!err)   
+//     console.log("SUCCESSFULLY ADDED USER : ",username ,)  
+//     else  
+//         console.log("error:",err);
+// })
 
 
 
@@ -49,7 +95,7 @@ connection.query(sql,[username,password,email,type],function(err,rows,result){
 // })
 // }
 
-});
+
 //connection.query("INSERT INTO grocery (id,Product_Name,Price) VALUES (123,'channa',122)",(err,rows,fields)=>{  
   //     if(!err)   
   //     console.log(!err)  

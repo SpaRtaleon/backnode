@@ -4,18 +4,18 @@ let path = require('path');
 let cookieParser = require('cookie-parser');
 let logger = require('morgan');
 
+
+
+const user=require('./model/user')
+authRouter=require('./routes/auth')
 let indexRouter = require('./routes/index');
-let usersRouter = require('./routes/users');
 let products=require('./routes/products')
 
 const app = express();
 const cors=require('cors');
-
 app.use(cors());
-require("dotenv").config();
-require("./config/dbconnenction").connect();
+let dbconnection=require("./config/dbconnenction")
 // view engine setup
-
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(logger('dev'));
@@ -25,7 +25,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/auth', authRouter);
 app.use('/products',products)
 
 
