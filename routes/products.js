@@ -1,6 +1,6 @@
 let express=require('express');
 let router=express.Router();
-let dbconnection=require('../dbconnenction');
+let dbconnection=require('../config/dbconnenction');
 
 router.get('/',(req,res)=>{
    let products=[{
@@ -29,6 +29,7 @@ router.post('/',(req,res)=>{
 
 router.post('/addproduct',(req,res,next)=>{
     console.log(req.body);
+    res.json({'name':'product'});
 })
 module.exports = router;
 // const product=function(product){

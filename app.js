@@ -10,9 +10,12 @@ let products=require('./routes/products')
 
 const app = express();
 const cors=require('cors');
+
 app.use(cors());
-let dbconnection=require("./dbconnenction")
+require("dotenv").config();
+require("./config/dbconnenction").connect();
 // view engine setup
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(logger('dev'));
