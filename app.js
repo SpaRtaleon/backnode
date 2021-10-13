@@ -1,41 +1,47 @@
+const bodyParser = require("body-parser");
 let createError = require('http-errors');
 let express = require('express');
 let path = require('path');
 let cookieParser = require('cookie-parser');
 let logger = require('morgan');
+let cors= require ('cors')
+const user = require('./models/user.model')
+const  products = require ( './routes/products');
 
-
-
-const user=require('./model/user')
-authRouter=require('./routes/auth')
-let indexRouter = require('./routes/index');
-let products=require('./routes/products')
+const db =require ('./models');
+const Role = db.role;
 
 const app = express();
-const cors=require('cors');
-app.use(cors());
-let dbconnection=require("./config/dbconnenction")
+let corsOptions = {
+  origin: "http://localhost:4200",
+  origin: "http://localhost:4100"
+}
+
+app.use(cors(corsOptions));
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/auth', authRouter);
-app.use('/products',products)
+// parse requests of content-type - application/json
+app.use(bodyParser.json());
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+
+require('./routes/auth.routes')(app);
+require('./routes/user.routes')(app);
+
+app.use('/products', products)
 
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -52,4 +58,26 @@ app.use(function(err, req, res, next) {
 //   return results;
 // }
 
+
+
+db.sequelize.sync({force:true }).then(()=>{
+    console.log('Drop and Resync Db');
+    initial();
+});
+
+function initial(){
+    Role.create({
+        id:1,
+        name:'user'
+    });
+
+    Role.create({
+        id:2,
+        name :'shopAdmin'
+    });
+    Role.create({
+        id:3,
+        name:'superAdmin'
+    });
+}
 module.exports = app;

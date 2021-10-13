@@ -1,21 +1,29 @@
-const mysql=require('mysql');
-const connection= mysql.createConnection({
- host:'localhost',
- user:'root',
- password:'Intel@123',
- database:'shopzz',
- connectionLimit : 10,               // this is the max number of connections before your pool starts waiting for a release
-multipleStatements : true           // I like this because it helps prevent nested sql statements, it can be buggy though, so be careful
-})
+module.exports={
+    HOST:'localhost',
+    USER:'root',
+    PASSWORD:'Intel@123',
+    DB:'shopzz',
+    dialect:'mysql',
+    pool:{
+        connectionLimit : 10,                  // this is the max number of connections before your pool starts waiting for a release
+        multipleStatements : true,               // I like this because it helps prevent nested sql statements, it can be buggy though, so be careful
+        acquire: 30000,
+        idle: 10000
+}
+             
 
-connection.connect((err) => {  
-    if(!err) {  
-        console.log("Db Connection Succeed");  
-    }  
-    else{  
-        console.log("Db connect Failed \n Error :" + JSON.stringify(err,undefined,2));  
-    }  
-});  
+};
+// const connection= mysql.createConnection({
+//  })
+
+// connection.connect((err) => {  
+//     if(!err) {  
+//         console.log("Db Connection Succeed");  
+//     }  
+//     else{  
+//         console.log("Db connect Failed \n Error :" + JSON.stringify(err,undefined,2));  
+//     }  
+// });  
  
 
 
@@ -24,4 +32,4 @@ connection.connect((err) => {
 //     console.log(!err)  
 //     else  
 //         console.log(err);  })
-module.exports = connection;
+// module.exports = connection;
