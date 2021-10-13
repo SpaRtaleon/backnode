@@ -14,12 +14,14 @@ module.exports = function(app) {
       next();
     });
   
-    app.get("/api/test/all", controller.allAccess);
+    app.get("/api/test/all", function (req,res)=>{controller.allAccess});
   
     app.get(
       "/api/test/user",
+      function (req,res)=>{
       [authJwt.verifyToken],
-      controller.userBoard
+      controller.userBoard}
+    
     );
   
     app.get(

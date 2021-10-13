@@ -1,18 +1,41 @@
-const {verifySignUp} = require ( '../middleware');
+let verifySignUp = require ( '../middleware/verifySignUp');
 const controller = require ( '../controllers/auth.controller');
-const { router } = require('router');
+const express = require('express');
+const router = express.Router();
 
-module.exports = function (app){
-  app.use(function(req,res,next){
+
+  headerOption=(req,res,next)=>{
     res.header(
       "Access-Control-Allow-Headers",
       "x-access-token,Origin,Content-Type,Accept"
       );
-      next();
+      next();}
+    
+router.post('/',async(req, res,next)=>{
+       res.send({msg :'home'})
+      });
+
+  router.post('/auth/signup',async(req, res,next)=>{
+    try{
+       console.log(req.body)
+      if(!(req.body.firstName||req.body.lastName||req.body.email||req.body.username||req.body.password)){
+       res.send({msg : 'Enter valid inputs !'})
+    }
+      verifySignUp.checkDuplicateUsernameOrEmail(req.body);
+      console.log('checkRolesExisted');
+      verifySignUp.checkRolesExisted;
+      console.log('checkRolesExisted');
+      controller.signup
+   }
+      catch(err){
+        res.json(err);
+      } 
+   
+    
   });
-  app.post('/api/auth/signup',[
-  verifySignUp.checkDuplicateUsernameOrEmail,
-  verifySignUp.checkRolesExisted],
-  controller.signup);
-  app.post('/api/auth/signin',controller,controller.signin);
-};
+
+  
+  router.post('/auth/signin',async(req, res,next)=>{
+    controller,controller.signin
+  });
+module.exports = router;

@@ -13,17 +13,10 @@ router.get('/',(req,res)=>{
         'product type':'Fashion',
         'price':'$130'
     }]
-    res.json(products);
+    res.json("hiiiii");
 })
 router.post('/',(req,res)=>{
-     const products={
-         id:products.length+1,
-         name:(req.body.name),
-         type:(req.body.type),
-         price:(req.body.price)
-     };
-     products.push(products);
-     res.send(products)
+     res.send({msg:'works'});
 });
 
 
