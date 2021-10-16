@@ -1,6 +1,6 @@
 let express=require('express');
 let router=express.Router();
-let dbconnection=require('../config/dbconnenction');
+
 
 router.get('/',(req,res)=>{
    let products=[{
