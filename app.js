@@ -24,9 +24,11 @@ app.use('/api', indexRouter);
 // require('./routes/auth.routes',appz);
 // require('./routes/user.routes')(app);
 
-let corsOptions = {
+const corsOptions = {
   origin: "http://localhost:4200",
-  origin: "http://localhost:4100"
+  origin: "http://localhost:4100",
+  
+
 }
 
 app.use(cors(corsOptions));
@@ -51,6 +53,7 @@ app.use('/products', products)
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
+  
 });
 
 // error handler

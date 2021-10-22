@@ -10,6 +10,7 @@ app.use(function(req, res, next) {
     "Access-Control-Allow-Headers",
     "x-access-token, Origin, Content-Type, Accept"
   );
+  res.header("Access-Control-Allow-Origin", "*");
   next();
 });
 
