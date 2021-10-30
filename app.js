@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+let admin=require('./admin/admin.routes');
 const bodyParser = require("body-parser");
 let createError = require('http-errors');
 let indexRouter = require ('./routes/auth.routes')
@@ -15,11 +16,11 @@ const user = require('./models/user.model')
 const  products = require ( './routes/products');
 const db =require ('./models');
 const Role = db.role;
-db.sequelize.sync()
-// {force:true }).then(()=>{
-//   console.log('Drop and Resync Db');
-//   initial();
-// });
+db.sequelize.sync(
+{force:true }).then(()=>{
+  console.log('Drop and Resync Db');
+  initial();
+});
 app.use('/api', indexRouter);
 // require('./routes/auth.routes',appz);
 // require('./routes/user.routes')(app);

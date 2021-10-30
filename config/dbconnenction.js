@@ -1,9 +1,10 @@
+require ('dotenv').config();
 module.exports={
-    HOST:'localhost',
-    USER:'root',
-    PASSWORD:'Intel@123',
-    DB:'shopzz',
-    dialect:'mysql',
+    HOST : process.env.HOST,
+    USER :process.env.USER,
+    PASSWORD : process.env.PASSWORD,
+    DB : process.env.DB,
+    dialect:process.env.dialect,
     pool:{
         connectionLimit : 10,                  // this is the max number of connections before your pool starts waiting for a release
         multipleStatements : true,               // I like this because it helps prevent nested sql statements, it can be buggy though, so be careful

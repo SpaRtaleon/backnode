@@ -13,12 +13,13 @@ exports.signup = (req,res) => {
     User.create({
         firstName : req.body.firstName,
         lastName : req.body.lastName,
-        username: req.body.username,
+        mobileNo: req.body.mobileNo,
         email   : req.body.email,
         password   : bcrypt.hashSync(req.body.password,8)
     })
     .then(user =>{
         if ( req.body.roles){
+            console.log(Role)
             Role.findAll({
                 where:{
                     name :{
@@ -47,7 +48,7 @@ exports.signin = (req,res)=>{
     console.log('controller.signin',req.body);
     User.findOne({
         where: {
-            username : req.body.username
+            mobileNo : req.body.mobileNo
         }
     }).then ( user => {
         if (!user){
@@ -73,7 +74,7 @@ exports.signin = (req,res)=>{
             }
             res.status(200).send({
                 id : user.id,
-                username : user.username,
+                mobileNo : user.mobileNo,
                 email: user.email,
                 roles:authorities,
                 accessToken:token
