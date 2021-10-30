@@ -37,18 +37,15 @@ checkDuplicateUsernameOrEmail=  (req, res, next)=> {
 
 checkRolesExisted = (req, res, next) => {
   console.log('checkRolesExisted function..',req.body);
-  if (req.body.roles) {
-    console.log('checkRolesExisted  body function..',req.body);
-    if (!ROLES.includes(req.body.roles)) {
+  if (!(req.body.roles=='shopAdmin'||req.body.roles=='superAdmin'||req.body.roles=='user')) {
+    console.log('checkRolesExisted  body function..');
         res.status(400).send({
           message: "Failed! Role does not exist = " + req.body.roles
         });
          return;
-      }
-   next();
   }
-  
   next();
+
 };
 
 
