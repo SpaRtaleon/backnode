@@ -77,7 +77,6 @@ app.use(function (err, req, res, next) {
 
 
 
-
 function initial(){
     Role.create({
         id:1,

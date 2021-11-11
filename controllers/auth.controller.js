@@ -2,11 +2,15 @@ const db = require('../models');
 const config = require('../config/auth.config');
 const User =  db.user;
 const Role = db.role;
-
+const shop = db.shop
 const Op = db.Sequelize.Op;
+const product = db.products;
 
 let jwt = require ('jsonwebtoken');
 let bcrypt = require ( 'bcryptjs');
+const { products } = require('../models');
+
+
 
 exports.signup = (req,res) => {
     // save user to database
@@ -87,3 +91,36 @@ exports.signin = (req,res)=>{
         res.status(500).send ({ msg : err.msg})
     });
 };
+
+exports.createShop = (req,res) =>{
+    console.log(req.body);
+   shop.create({
+        shopName:req.body.shopname,
+        shopAddress:req.body.shopaddress,
+        phoneNumber:req.body.shopnumber,
+        shopType:req.body.shoptype,
+        shopimg:req.body.shopimg,
+        description:req.body.description
+    }).then(()=>{
+        res.send({msg:'shop created successfully'})
+    })
+    .catch(err=> {
+        res.status(500).send({
+            msg: err
+        });
+    });
+}
+exports.addProduct=(req,res)=>{
+    product.create({
+        productName:req.body.productName,
+        productCategory:req.body.productCategory,
+        productMRPrice:req.body.productMRPrice,
+        productSalePrice:req.body.productSalePrice,
+        active:req.body.active,
+        description:req.body.description
+    }).then(()=>{
+        res.send({msg:'Products Added Successfully !'
+        })
+    }),
+    err=>{res.send (err)}
+}
