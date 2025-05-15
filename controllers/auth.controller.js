@@ -5,7 +5,7 @@ const Role = db.role;
 const shop = db.shop
 const Op = db.Sequelize.Op;
 const product = db.products;
-
+ 
 let jwt = require ('jsonwebtoken');
 let bcrypt = require ( 'bcryptjs');
 const { products } = require('../models');
